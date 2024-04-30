@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - /my/lib/mysql:/var/lib/mysql
+      - /my/my.cnf:/etc/my.cnf
+      - /my/log/mysql:/var/log/mysql
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - /docker-c/redis.conf:/docker-c/redis.conf
+    command: redis-server /docker-c/redis.conf
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
